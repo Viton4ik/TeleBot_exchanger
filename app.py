@@ -56,15 +56,16 @@ def download(message: telebot.types.Message):
 @bot.message_handler(commands=['show'])
 def memory(message: telebot.types.Message):
 	if message.chat.username == admin:
+		converted_cash = json.loads(red.get('cash'))
 		text = f"Memory statistic, sir!:\n\n" \
-               f"'help' requests: {cash['help']}\n" \
-               f"'currency' requests: {cash['currency']}\n" \
-               f"'crypto' requests: {cash['crypto']}\n" \
-			   f"'fullCurrecncy' requests: {cash['fullCurrecncy']}\n" \
-			   f"'fullCrypto' requests: {cash['fullCrypto']}\n" \
-			   f"'convert' requests: {cash['convert']}\n" \
-			   f"'error' requests: {cash['error']}\n" \
-			   f"'Total' requests: {cash['help']+cash['currency']+cash['crypto']+cash['fullCurrecncy']+cash['fullCrypto']+cash['convert']+cash['error']}"
+               f"'help' requests: {converted_cash['help']}\n" \
+               f"'currency' requests: {converted_cash['currency']}\n" \
+               f"'crypto' requests: {converted_cash['crypto']}\n" \
+			   f"'fullCurrecncy' requests: {converted_cash['fullCurrecncy']}\n" \
+			   f"'fullCrypto' requests: {converted_cash['fullCrypto']}\n" \
+			   f"'convert' requests: {converted_cash['convert']}\n" \
+			   f"'error' requests: {converted_cash['error']}\n" \
+			   f"'Total' requests: {converted_cash['help']+converted_cash['currency']+converted_cash['crypto']+converted_cash['fullCurrecncy']+converted_cash['fullCrypto']+converted_cash['convert']+converted_cash['error']}"
 	else:
 		text = "Admin access needed!"
 	bot.send_message(message.chat.id, text)
