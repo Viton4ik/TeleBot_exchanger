@@ -63,6 +63,7 @@ class Converter:
 class Counter:
     @staticmethod
     def count(key): # counter for each function
-        cash[key] +=1
-        red.set('cash', json.dumps(cash))
+        converted_cash = json.loads(red.get('cash'))
+        converted_cash[key] += 1
+        red.set('cash', json.dumps(converted_cash))
 

@@ -128,7 +128,7 @@ def currency(message: telebot.types.Message):
 
 # Обрабатываются все сообщения, содержащие команды '/crypto currency'.
 @bot.message_handler(commands=['crypto'])
-def currency(message: telebot.types.Message):
+def crypto_currency(message: telebot.types.Message):
 	text = f"Crypto currency list:"
 	for i, name in enumerate(crypto_currency_list.items()): #CurrencyInfo.get_currency_list().items():
 		if i <= 50:
@@ -141,21 +141,19 @@ def currency(message: telebot.types.Message):
 
 # Обрабатываются все сообщения, содержащие команды '/fullCrypto'.
 @bot.message_handler(commands=['fullCrypto'])
-def send_welcome(message):
+def send_fullCrypto(message):
 	with open('crypro_currency_list.txt', 'rb') as file:
-		f = file.read()
-	Counter.count('fullCrypto')
-	bot.send_message(message.chat.id, '"crypro_currency_list.txt" has been sent')
-	bot.send_document(message.chat.id, f)
+		Counter.count('fullCrypto')
+		bot.send_message(message.chat.id, '"crypro_currency_list.txt" has been sent')
+		bot.send_document(message.chat.id, file)
 
 # Обрабатываются все сообщения, содержащие команды '/fullCurrecncy'.
 @bot.message_handler(commands=['fullCurrecncy'])
-def send_welcome(message):
+def send_fullCurrecncy(message):
 	with open('currency_list.txt', 'rb') as file:
-		f = file.read()
-	Counter.count('fullCurrecncy')
-	bot.send_message(message.chat.id, '"currency_list.txt" has been sent')
-	bot.send_document(message.chat.id, f)
+		Counter.count('fullCurrecncy')
+		bot.send_message(message.chat.id, '"currency_list.txt" has been sent')
+		bot.send_document(message.chat.id, file)
 
 
 # Обрабатываются все сообщения, содержащие text.
