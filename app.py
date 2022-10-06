@@ -63,9 +63,10 @@ def memory(message: telebot.types.Message):
                f"'crypto' requests: {converted_cash['crypto']}\n" \
 			   f"'fullCurrecncy' requests: {converted_cash['fullCurrecncy']}\n" \
 			   f"'fullCrypto' requests: {converted_cash['fullCrypto']}\n" \
+			   f"'rus' requests: {converted_cash['rus']}\n" \
 			   f"'convert' requests: {converted_cash['convert']}\n" \
-			   f"'error' requests: {converted_cash['error']}\n" \
-			   f"'Total' requests: {converted_cash['help']+converted_cash['currency']+converted_cash['crypto']+converted_cash['fullCurrecncy']+converted_cash['fullCrypto']+converted_cash['convert']+converted_cash['error']}"
+			   f"'error' requests: {converted_cash['error']}\n\n" \
+			   f"'Total' requests: {converted_cash['help']+converted_cash['currency']+converted_cash['crypto']+converted_cash['fullCurrecncy']+converted_cash['fullCrypto']+converted_cash['convert']+converted_cash['error']+converted_cash['rus']}"
 	else:
 		text = "Admin access needed!"
 	bot.send_message(message.chat.id, text)
@@ -102,16 +103,40 @@ def help(message: telebot.types.Message):
 			f"@{bot_name} is used to get the currency exchange rate!\n\n"
 	f"- To activate the @{bot_name} put your command in the following way:\n<currency ticker>\
 	<converted currency ticker>\
-	<amount>\n\nUseful information:\n"
+	<amount>\nExample: USD EUR 1\n\nUseful information:\n"   #### rev 3.0
 			f"- Currencies list (base): /currency\n"
 			f"- Crypto list (base): /crypto\n"
 			f"- Download full currencies list: /fullCurrecncy\n"
-			f"- Download full currencies list: /fullCrypto"
+			f"- Download full crypto currencies list: /fullCrypto\n"
+			f"- Change the language (Russian): /rus"
 			f"{admin_function}"
-			# f"- To say thanks to the developer: /thanks"
+			f"\nCreated by @{message.chat.username}\n"
+			# f"To say thanks: /thanks"
     )
 	Counter.count('help')
 	bot.reply_to(message, text)
+
+# Обрабатываются все сообщения, содержащие команды '/rus'. #### rev 3.0
+@bot.message_handler(commands=['rus'])
+def rus(message: telebot.types.Message):
+	cond = f"Добро пожаловать, @{message.chat.username}"  # , {message.chat.first_name}")
+	text = (f"{cond}\n"
+			f"@{bot_name} необходим для получения биржевых курсов валют!\n\n"
+	f"- Чтобы активировать бота @{bot_name} введите команду следующим образом:\n<тикер валюты>\
+	<тикер конвертированной валюты\
+	<сумма>\nПример: USD EUR 1\n\nПолезная информация:\n"   
+			f"- Список валют: /currency\n"
+			f"- Список криптовалют: /crypto\n"
+			f"- Скачать полный список валют: /fullCurrecncy\n"
+			f"- Скачать полный список криптовалют: /fullCrypto\n"
+
+
+			f"\nСоздано: @{message.chat.username}\n"
+			# f"To say thanks: /thanks"
+    )
+	Counter.count('rus')
+	bot.reply_to(message, text)
+
 
 # Обрабатываются все сообщения, содержащие команды '/currency'.
 @bot.message_handler(commands=['currency'])
@@ -129,7 +154,7 @@ def currency(message: telebot.types.Message):
 
 # Обрабатываются все сообщения, содержащие команды '/crypto currency'.
 @bot.message_handler(commands=['crypto'])
-def crypto_currency(message: telebot.types.Message):
+def currency(message: telebot.types.Message):
 	text = f"Crypto currency list:"
 	for i, name in enumerate(crypto_currency_list.items()): #CurrencyInfo.get_currency_list().items():
 		if i <= 50:
@@ -142,19 +167,35 @@ def crypto_currency(message: telebot.types.Message):
 
 # Обрабатываются все сообщения, содержащие команды '/fullCrypto'.
 @bot.message_handler(commands=['fullCrypto'])
-def send_fullCrypto(message):
+def send_welcome(message):
 	with open('crypro_currency_list.txt', 'rb') as file:
+		# f = file.read()
 		Counter.count('fullCrypto')
 		bot.send_message(message.chat.id, '"crypro_currency_list.txt" has been sent')
 		bot.send_document(message.chat.id, file)
+	# bot.send_document(message.chat.id, document = open('crypro_currency_list.txt', 'rb'))
 
 # Обрабатываются все сообщения, содержащие команды '/fullCurrecncy'.
 @bot.message_handler(commands=['fullCurrecncy'])
-def send_fullCurrecncy(message):
+def send_welcome(message):
 	with open('currency_list.txt', 'rb') as file:
+		# f = file.read()
 		Counter.count('fullCurrecncy')
 		bot.send_message(message.chat.id, '"currency_list.txt" has been sent')
 		bot.send_document(message.chat.id, file)
+
+###### rev 3.0
+# Обрабатываются все сообщения, содержащие команды '/set'. - set of 3 currencies
+@bot.message_handler(commands=['set'])
+def set(message):
+	currency = ['USD', 'EUR', 'RSD']
+	base = "RUB"
+	amount = '1'
+	for quote in currency:
+		total_base = Converter.converter(quote, base, amount)
+		Counter.count('convert')
+		text = f"{amount} {quote} ({currency_list[quote]}) = {total_base[base] * float(amount):2.2f} {base}"
+		bot.send_message(message.chat.id, text)
 
 
 # Обрабатываются все сообщения, содержащие text.
@@ -162,7 +203,6 @@ def send_fullCurrecncy(message):
 def convert(message: telebot.types.Message):
 	try:
 		value = message.text.split(' ')
-
 
 		error_text = (f"Put your command in the following way:\n<currency ticker>\
 			<converted currency ticker>\
