@@ -110,7 +110,7 @@ def help(message: telebot.types.Message):
 			f"- Download full crypto currencies list: /fullCrypto\n"
 			f"- Change the language (Russian): /rus"
 			f"{admin_function}"
-			f"\nCreated by @{message.chat.username}\n"
+			f"\nCreated by @Victor\n"
 			# f"To say thanks: /thanks"
     )
 	Counter.count('help')
