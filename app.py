@@ -131,7 +131,7 @@ def rus(message: telebot.types.Message):
 			f"- Скачать полный список криптовалют: /fullCrypto\n"
 
 
-			f"\nСоздано: @{message.chat.username}\n"
+			f"\nСоздано: @Victor\n"
 			# f"To say thanks: /thanks"
     )
 	Counter.count('rus')
